@@ -3,6 +3,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -12,28 +13,29 @@ import io.appium.java_client.android.AndroidElement;
 
 
 public class base {
-
-	public static AndroidDriver driver;
 	
-	public static void main(String[] args) {
+	@BeforeTest
+	public static AndroidDriver<AndroidElement> Capabilities()throws MalformedURLException{
+	
+	
 		
 	  
-	@BeforeTest
-	public void setup() throws MalformedURLException
-	{
-		DesiredCapabilities capabilities = new DesiredCapabilities();
+	
+		DesiredCapabilities cap = new DesiredCapabilities();
 
 
-		capabilities.setCapability("platformName","Android");
-		capabilities.setCapability("appium:automationName", "uiautomator2");
-		capabilities.setCapability("appium:deviceName", "AilyaEmulator");     
-		capabilities.setCapability("appium:noReset","true");
-		capabilities.setCapability("appium:appPackage", "com.ctere1.reactactivechat");
+		cap.setCapability("platformName","Android");
+		cap.setCapability("appium:automationName", "uiautomator2");
+		cap.setCapability("appium:deviceName", "AilyaEmulator");     
+		cap.setCapability("appium:noReset","true");
+		cap.setCapability("appium:appPackage", "com.ctere1.reactactivechat");
 
 		URL url = URI.create("http://127.0.0.1:4723/:4723/wd/hub").toURL();
 		
 
-		driver = new AndroidDriver(url, capabilities);
+		AndroidDriver<AndroidElement> driver = new AndroidDriver<>(url, cap);
+		
+		return driver;
 		
 		
 	}
@@ -41,9 +43,9 @@ public class base {
 	 @Test
 	    public void loginTest() {
 	        // Locate and interact with login fields and buttons
-	        AndroidElement usernameField = driver.findElementById("00000000-0000-0028-ffff-ffff000000b2");
-	        AndroidElement passwordField = driver.findElementById("00000000-0000-0028-ffff-ffff000000b3");
-	        AndroidElement loginButton = driver.findElementById("00000000-0000-0028-ffff-ffff000000b4");
+	        AndroidElement usernameField = driver.findElementById("00000000-0000-002d-ffff-ffff000000b1");	        		+ "");
+	        AndroidElement passwordField = driver.findElementById("00000000-0000-002d-ffff-ffff000000b2");
+	        AndroidElement loginButton = driver.findElementById("00000000-0000-002d-ffff-ffff000000ae");
 
 	        // Enter username and password
 	        usernameField.sendKeys("da@yahoo.com");
@@ -57,29 +59,32 @@ public class base {
 		
 	  public void MessageTest() {
          //click chat button
-         MobileElement messageInputField = driver.findElement(By.id("00000000-0000-0028-ffff-ffff00000150")); // Adjust with actual ID
+         AndroidElement messageicon = driver.findElement(By.className("android.view.ViewGroup")); 
         
-         
+         messageicon.click();
          //select user
-         MobileElement messageInputField = driver.findElement(By.id("00000000-0000-0028-ffff-ffff00000239"));"
+         AndroidElement selctUser = driver.findElement(By.xpath("(//android.widget.TextView[@text='User status'])[2]"));
+         
+//exact interaction is not available
+         
+         selctUser.click();
+         
+         MobileElement messageInputField = driver.findElement(By.className("android.widget.EditText"));
         		 
         		 //  click textfield  
         		 
-        MobileElement messageInputField = driver.findElement(By.id("Type a message..."));
+        messageInputField.click()
 
 
          messageInputField.sendKeys("Hello, this is a test message!");
 
          // Locate the send button and click it
-         MobileElement sendButton = driver.findElement(By.id("00000000-0000-0028-ffff-ffff00000321"));
+         MobileElement sendButton = driver.findElement(By.className("android.widget.TextView"));
 
          sendButton.click();
        
 	  }
 	
 	
-
-
-	}
 
 }
